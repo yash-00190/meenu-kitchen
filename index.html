@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meenu's Kitchen — Order Online</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- SCREEN 1: MENU -->
+  <div id="screen-menu" class="screen active">
+
+    <!-- Hero Banner with Stall Image -->
+    <header class="hero-banner">
+      <!-- Stall Image Section -->
+      <div class="hero-image-container">
+        <img src="stall-hero.png" alt="Meenu's Kitchen Stall" class="hero-stall-image" onerror="this.style.display='none'" />
+        <div class="hero-image-overlay"></div>
+        <div class="hero-badge-floating">
+          <span class="badge-dot"></span>
+          OPEN NOW
+        </div>
+      </div>
+
+      <!-- Brand Info Section -->
+      <div class="hero-brand-section">
+        <h1 class="hero-brand-title">Meenu's Kitchen</h1>
+        <p class="hero-brand-tagline">Authentic Street-Style Momos & Fast Food</p>
+        <div class="hero-brand-location">
+          <span class="location-icon">📍</span>
+          <span>Leelawati Chowk, Vijay Nagar, Ghaziabad</span>
+        </div>
+        <div class="hero-name-box">
+          <input type="text" id="customer-name-hero" placeholder="Enter your name to start ordering..." maxlength="50" />
+        </div>
+      </div>
+    </header>
+
+    <!-- Category Navigation -->
+    <nav class="category-nav" id="cat-tabs">
+      <!-- populated by JS -->
+    </nav>
+
+    <!-- Menu Grid -->
+    <main id="menu-list" class="menu-container">
+      <!-- populated by JS -->
+    </main>
+
+    <!-- Floating Cart Bar -->
+    <div id="bottom-bar" class="floating-cart hidden">
+      <div class="fc-left">
+        <div class="fc-icon">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </div>
+        <div class="fc-info">
+          <span id="bar-count" class="fc-count">0 items</span>
+          <span id="bar-total" class="fc-total">₹0</span>
+        </div>
+      </div>
+      <button id="btn-view-cart" class="fc-btn" disabled>
+        View Cart
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14l-1.5-9H6.5L5 3H2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="9" y1="10" x2="15" y2="10"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: CART -->
+  <div id="screen-cart" class="screen">
+    <header class="screen-header">
+      <button id="btn-back-menu" class="back-arrow">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h1>Your Order</h1>
+    </header>
+
+    <div class="cart-card">
+      <div class="cart-customer-banner">
+        <div class="ccb-avatar" id="cart-avatar">M</div>
+        <div class="ccb-info">
+          <span class="ccb-label">Ordering for</span>
+          <span class="ccb-name" id="cart-customer-display">—</span>
+        </div>
+      </div>
+
+      <div class="cart-divider"></div>
+
+      <div id="cart-items" class="cart-items">
+        <!-- populated by JS -->
+      </div>
+
+      <div class="cart-divider"></div>
+
+      <div class="bill-summary">
+        <div class="bill-row bill-row-total">
+          <span>Total</span>
+          <span id="cart-total" class="cart-total-amount">₹0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Special Instructions Input -->
+    <div class="special-note-section">
+      <label for="special-note" class="special-note-label">
+        <span class="note-icon">📝</span>
+        Special Instructions (Optional)
+      </label>
+      <textarea 
+        id="special-note" 
+        class="special-note-input" 
+        placeholder="E.g., less spicy, extra sauce, no onion..."
+        maxlength="200"
+        rows="2"
+      ></textarea>
+      <span class="note-char-count"><span id="note-count">0</span>/200</span>
+    </div>
+
+    <div class="cart-action">
+      <button id="btn-pay" class="btn btn-primary btn-pay-big" disabled>
+        <span>Proceed to Pay</span>
+        <span id="btn-pay-amount">₹0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: PAYMENT -->
+  <div id="screen-payment" class="screen">
+    <header class="screen-header">
+      <button id="btn-back-cart" class="back-arrow">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h1>Payment</h1>
+    </header>
+
+    <div class="payment-container">
+      <!-- Amount Display -->
+      <div class="payment-amount-card">
+        <span class="pac-label">Total Amount</span>
+        <span id="pay-amount" class="pac-amount">₹0</span>
+      </div>
+
+      <!-- QR Code Section -->
+      <div class="qr-payment-card">
+        <div class="qr-header">
+          <span class="qr-icon">📱</span>
+          <h3>Scan & Pay</h3>
+        </div>
+
+        <div class="qr-image-container">
+          <img src="images/payment-qr.jpg" alt="Payment QR Code" class="qr-image" />
+        </div>
+
+        <div class="qr-info">
+          <p class="qr-instruction">Scan this QR using any UPI app</p>
+          <p class="qr-apps">GPay • PhonePe • Paytm • BHIM</p>
+        </div>
+
+        <div class="qr-divider">
+          <span>After payment, tap below</span>
+        </div>
+
+        <button id="btn-upi" class="btn btn-payment-done">
+          <span class="payment-done-icon">✓</span>
+          <span>I've Completed Payment</span>
+        </button>
+      </div>
+
+      <!-- OR Divider -->
+      <div class="payment-or-divider">
+        <span>OR</span>
+      </div>
+
+      <!-- Pay at Counter Option -->
+      <div class="counter-payment-card">
+        <button id="btn-counter" class="btn btn-counter-full">
+          <span class="counter-icon">💵</span>
+          <div class="counter-text">
+            <strong>Pay at Counter</strong>
+            <small>Cash or card payment</small>
+          </div>
+          <span class="counter-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3.5: PROCESSING -->
+  <div id="screen-processing" class="screen">
+    <div class="processing-box">
+      <div class="spinner"></div>
+      <p>Processing payment...</p>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: CONFIRMATION -->
+  <div id="screen-confirm" class="screen">
+    <div class="confirm-wrapper">
+      <div class="confirm-success-banner">
+        <div class="confirm-check">✓</div>
+        <h2>Order Confirmed!</h2>
+        <p class="csb-sub">Your food is being prepared</p>
+      </div>
+
+      <div class="confirm-token-card">
+        <span class="token-label">YOUR TOKEN</span>
+        <span id="confirm-token" class="token-number">001</span>
+      </div>
+
+      <div class="confirm-card">
+        <div class="confirm-customer-row">
+          <div class="ccr-avatar" id="confirm-avatar">M</div>
+          <div class="ccr-info">
+            <div class="confirm-customer-name" id="confirm-name">Customer</div>
+            <div class="confirm-meta">💳 <span id="confirm-payment">—</span></div>
+          </div>
+        </div>
+
+        <div class="confirm-divider"></div>
+
+        <div id="confirm-items" class="confirm-items-list">
+          <!-- populated by JS -->
+        </div>
+
+        <div class="confirm-divider"></div>
+
+        <div class="bill-summary">
+          <div class="bill-row bill-row-total">
+            <span>Total</span>
+            <span id="confirm-total" class="confirm-total-amount">₹0</span>
+          </div>
+        </div>
+
+        <!-- Special Note Display on Confirmation -->
+        <div id="confirm-special-note-section" class="confirm-special-note hidden">
+          <div class="confirm-note-header">📝 Special Instructions</div>
+          <div id="confirm-special-note" class="confirm-note-text"></div>
+        </div>
+      </div>
+
+      <div class="confirm-status-card" id="status-card">
+        <div class="csc-left">
+          <span class="status-label">Order Status</span>
+          <span id="confirm-status" class="status-value">🟡 Preparing...</span>
+        </div>
+        <div class="csc-dot pulse-dot"></div>
+      </div>
+
+      <button id="btn-new-order" class="btn btn-primary btn-new">🔄 Place New Order</button>
+    </div>
+  </div>
+
+  <!-- Variant Selection Modal -->
+  <div id="variant-modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-item-name">Select Size</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="variant-options">
+          <button class="variant-btn" id="btn-half">
+            <span class="variant-label">Half</span>
+            <span class="variant-detail">5 pcs</span>
+            <span class="variant-price" id="price-half">₹0</span>
+          </button>
+          <button class="variant-btn" id="btn-full">
+            <span class="variant-label">Full</span>
+            <span class="variant-detail">10 pcs</span>
+            <span class="variant-price" id="price-full">₹0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── State ─────────────────────────────────────────
+    let menu = [];
+    let cart = {};
+    let currentOrder = null;
+    let statusPollTimer = null;
+    let activeCategory = null;
+    let pendingItem = null;
+
+    const $ = (s) => document.querySelector(s);
+    const screens = document.querySelectorAll('.screen');
+
+    function showScreen(id) {
+      screens.forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    // ── Category icons ────────────────────────────────
+    const catIcons = {
+      'Steam Momo': '🥟',
+      'Fried Momo': '🍳',
+      'Kurkure Momo': '🌟',
+      'Gravy Momo': '🍲',
+      'Schezwan Momo': '🌶️',
+      'Special': '⭐',
+      'Chilly Potato': '🥔',
+      'Noodles': '🍜',
+      'Manchurian': '🥡',
+      'Fried Rice': '🍚',
+      'Burgers': '🍔',
+      'Sandwich': '🥪',
+      'Fries': '🍟',
+      'Spring Rolls': '🥠'
+    };
+
+    // ── Load menu from API ────────────────────────────
+    async function loadMenu() {
+      try {
+        const res = await fetch('/api/menu');
+        menu = await res.json();
+        renderCategoryTabs();
+        renderMenu();
+      } catch (e) {
+        console.error('Failed to load menu:', e);
+        document.getElementById('menu-list').innerHTML = '<p style="text-align:center;color:#888;padding:40px;">Failed to load menu. Please refresh.</p>';
+      }
+    }
+
+    function renderCategoryTabs() {
+      const categories = [...new Set(menu.map(m => m.category))];
+      let html = `<button class="cat-tab active" onclick="filterCat(null)">All</button>`;
+      for (const cat of categories) {
+        const icon = catIcons[cat] || '🍽️';
+        html += `<button class="cat-tab" onclick="filterCat('${cat}')">${icon} ${cat}</button>`;
+      }
+      $('#cat-tabs').innerHTML = html;
+    }
+
+    function filterCat(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+      const tabs = document.querySelectorAll('.cat-tab');
+      if (!cat) { tabs[0].classList.add('active'); }
+      else {
+        tabs.forEach(t => { if (t.textContent.includes(cat)) t.classList.add('active'); });
+      }
+      renderMenu();
+    }
+
+    function renderMenu() {
+      const list = $('#menu-list');
+      const categories = [...new Set(menu.map(m => m.category))];
+      const filtered = activeCategory ? [activeCategory] : categories;
+
+      let html = '';
+      for (const cat of filtered) {
+        const icon = catIcons[cat] || '🍽️';
+        const isSpecial = cat === 'Special';
+        html += `
+          <section class="menu-section" id="section-${cat.replace(/\s+/g, '-')}">
+            <div class="section-header ${isSpecial ? 'special-header' : ''}">
+              <span class="section-icon">${icon}</span>
+              <h2 class="section-title">${isSpecial ? "Meenu's Kitchen Special" : cat}</h2>
+            </div>
+            <div class="menu-card-grid">`;
+
+        const items = menu.filter(m => m.category === cat);
+        for (const item of items) {
+          const totalQty = getTotalQtyForItem(item.id);
+          const activeClass = totalQty > 0 ? ' food-card-active' : '';
+          const hasVariants = item.halfPrice && item.fullPrice;
+          const displayPrice = item.price || item.halfPrice;
+
+          html += `
+            <div class="food-card${activeClass}" id="card-${item.id}" data-id="${item.id}">
+              <div class="fc-img-wrap">
+                <img src="${item.img}" alt="${item.name}" class="fc-img" loading="lazy" />
+                ${totalQty > 0 ? `<div class="fc-qty-badge">${totalQty}</div>` : ''}
+                ${hasVariants ? '<div class="fc-variant-tag">Half / Full</div>' : ''}
+              </div>
+              <div class="fc-body">
+                <div class="fc-name">${item.name}</div>
+                <div class="fc-desc">${item.desc || ''}</div>
+                ${item.pieces ? `<div class="fc-pieces">${item.pieces} pcs</div>` : ''}
+                <div class="fc-footer">
+                  <div class="fc-price">
+                    ${hasVariants
+                      ? `<span class="price-range">₹${item.halfPrice} - ₹${item.fullPrice}</span>`
+                      : `<span>₹${displayPrice}</span>`
+                    }
+                  </div>
+                  <button class="fc-btn-add" onclick="handleAddClick(${item.id})">
+                    ${totalQty > 0 ? '+' : 'ADD'}
+                  </button>
+                </div>
+              </div>
+            </div>`;
+        }
+        html += `</div></section>`;
+      }
+      list.innerHTML = html;
+    }
+
+    function getTotalQtyForItem(itemId) {
+      let total = 0;
+      const halfKey = `${itemId}-half`;
+      const fullKey = `${itemId}-full`;
+      const singleKey = `${itemId}`;
+      if (cart[halfKey]) total += cart[halfKey].qty;
+      if (cart[fullKey]) total += cart[fullKey].qty;
+      if (cart[singleKey]) total += cart[singleKey].qty;
+      return total;
+    }
+
+    function handleAddClick(itemId) {
+      const item = menu.find(m => m.id === itemId);
+      if (!item) return;
+      if (item.halfPrice && item.fullPrice) {
+        showVariantModal(item);
+      } else {
+        addToCart(item.id, null, item.price);
+      }
+    }
+
+    function showVariantModal(item) {
+      pendingItem = item;
+      $('#modal-item-name').textContent = item.name;
+      $('#price-half').textContent = `₹${item.halfPrice}`;
+      $('#price-full').textContent = `₹${item.fullPrice}`;
+      $('#variant-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideVariantModal() {
+      $('#variant-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+      pendingItem = null;
+    }
+
+    function addToCart(itemId, variant, price) {
+      const item = menu.find(m => m.id === itemId);
+      if (!item) return;
+      const key = variant ? `${itemId}-${variant}` : `${itemId}`;
+      if (cart[key]) {
+        cart[key].qty = Math.min(20, cart[key].qty + 1);
+      } else {
+        cart[key] = { id: itemId, variant: variant, qty: 1, price: price };
+      }
+      renderMenu();
+      updateBottomBar();
+      hideVariantModal();
+    }
+
+    function updateBottomBar() {
+      const itemCount = Object.values(cart).reduce((a, b) => a + b.qty, 0);
+      const total = calcTotal();
+      const bar = $('#bottom-bar');
+      const nameInput = $('#customer-name-hero');
+      const name = nameInput.value.trim();
+
+      $('#bar-count').textContent = `${itemCount} item${itemCount !== 1 ? 's' : ''}`;
+      $('#bar-total').textContent = `₹${total}`;
+
+      if (itemCount > 0) { bar.classList.remove('hidden'); } else { bar.classList.add('hidden'); }
+      if (itemCount > 0 && name === '') {
+        nameInput.classList.add('name-required');
+      } else {
+        nameInput.classList.remove('name-required');
+      }
+      $('#btn-view-cart').disabled = itemCount === 0 || name === '';
+    }
+
+    function calcTotal() {
+      let total = 0;
+      for (const [key, cartItem] of Object.entries(cart)) {
+        total += cartItem.price * cartItem.qty;
+      }
+      return total;
+    }
+
+    // ── Cart ──────────────────────────────────────────
+    function showCart() {
+      const total = calcTotal();
+      const customerName = $('#customer-name-hero').value.trim();
+      $('#cart-customer-display').textContent = customerName;
+      $('#cart-avatar').textContent = customerName.charAt(0).toUpperCase();
+
+      let html = '';
+      for (const [key, cartItem] of Object.entries(cart)) {
+        const item = menu.find(m => m.id === cartItem.id);
+        if (item) {
+          const variantLabel = cartItem.variant ? ` (${cartItem.variant === 'half' ? 'Half' : 'Full'})` : '';
+          html += `
+            <div class="cart-item-card">
+              <img src="${item.img}" alt="${item.name}" class="ci-thumb" />
+              <div class="ci-info">
+                <span class="ci-name">${item.name}${variantLabel}</span>
+                <span class="ci-meta">₹${cartItem.price} × ${cartItem.qty}</span>
+              </div>
+              <div class="ci-controls">
+                <button class="ci-btn ci-minus" onclick="cartChangeQty('${key}', -1)">−</button>
+                <span class="ci-qty">${cartItem.qty}</span>
+                <button class="ci-btn ci-plus" onclick="cartChangeQty('${key}', 1)">+</button>
+              </div>
+              <span class="ci-total">₹${cartItem.price * cartItem.qty}</span>
+            </div>`;
+        }
+      }
+
+      $('#cart-items').innerHTML = html;
+      $('#cart-total').textContent = `₹${total}`;
+      $('#btn-pay-amount').textContent = `₹${total}`;
+      $('#btn-pay').disabled = false;
+      showScreen('screen-cart');
+    }
+
+    function cartChangeQty(key, delta) {
+      if (!cart[key]) return;
+      cart[key].qty = Math.max(0, Math.min(20, cart[key].qty + delta));
+      if (cart[key].qty === 0) delete cart[key];
+      if (Object.keys(cart).length === 0) {
+        showScreen('screen-menu');
+        updateBottomBar();
+        renderMenu();
+        return;
+      }
+      showCart();
+      updateBottomBar();
+      renderMenu();
+    }
+
+    // ── Payment ───────────────────────────────────────
+    function showPayment() {
+      const total = calcTotal();
+      $('#pay-amount').textContent = `₹${total}`;
+      showScreen('screen-payment');
+    }
+
+    async function placeOrder(paymentMethod) {
+      showScreen('screen-processing');
+
+      const items = Object.values(cart).map(cartItem => ({
+        id: cartItem.id,
+        qty: cartItem.qty,
+        variant: cartItem.variant
+      }));
+
+      if (paymentMethod === 'upi') {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+
+      try {
+        const specialNote = $('#special-note').value.trim();
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerName: $('#customer-name-hero').value.trim(),
+            tableNumber: 'N/A',
+            items,
+            paymentMethod,
+            specialNote,
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          currentOrder = data.order;
+          showConfirmation();
+        } else {
+          alert('Order failed: ' + (data.error || 'Unknown error'));
+          showScreen('screen-cart');
+        }
+      } catch (err) {
+        alert('Network error. Please try again.');
+        showScreen('screen-cart');
+      }
+    }
+
+    // ── Confirmation ──────────────────────────────────
+    function showConfirmation() {
+      const order = currentOrder;
+      $('#confirm-token').textContent = String(order.id).padStart(3, '0');
+      $('#confirm-name').textContent = order.customerName;
+      $('#confirm-avatar').textContent = order.customerName.charAt(0).toUpperCase();
+      $('#confirm-payment').textContent = order.paymentMethod;
+
+      let html = '';
+      for (const item of order.items) {
+        const variantLabel = item.variant ? ` (${item.variant === 'half' ? 'Half' : 'Full'})` : '';
+        html += `
+          <div class="confirm-item-row">
+            <span class="cir-name">${item.name}${variantLabel}</span>
+            <span class="cir-qty">×${item.qty}</span>
+            <span class="cir-price">₹${item.lineTotal}</span>
+          </div>`;
+      }
+      $('#confirm-items').innerHTML = html;
+      $('#confirm-total').textContent = `₹${order.total}`;
+
+      const noteSection = $('#confirm-special-note-section');
+      if (order.specialNote && order.specialNote.trim()) {
+        $('#confirm-special-note').textContent = order.specialNote;
+        noteSection.classList.remove('hidden');
+      } else {
+        noteSection.classList.add('hidden');
+      }
+
+      updateStatusDisplay(order.status);
+      showScreen('screen-confirm');
+      startStatusPolling(order.id);
+    }
+
+    function updateStatusDisplay(status) {
+      const map = { 'New': '🟠 New', 'Preparing': '🟡 Preparing...', 'Ready': '🟢 Ready for pickup!', 'Done': '✅ Done' };
+      $('#confirm-status').textContent = map[status] || status;
+    }
+
+    function startStatusPolling(orderId) {
+      if (statusPollTimer) clearInterval(statusPollTimer);
+      statusPollTimer = setInterval(async () => {
+        try {
+          const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}`);
+          const order = await res.json();
+          updateStatusDisplay(order.status);
+          if (order.status === 'Done') clearInterval(statusPollTimer);
+        } catch (e) { /* ignore */ }
+      }, 5000);
+    }
+
+    function resetApp() {
+      cart = {};
+      currentOrder = null;
+      activeCategory = null;
+      if (statusPollTimer) clearInterval(statusPollTimer);
+      $('#customer-name-hero').value = '';
+      $('#special-note').value = '';
+      $('#note-count').textContent = '0';
+      renderCategoryTabs();
+      renderMenu();
+      updateBottomBar();
+      showScreen('screen-menu');
+    }
+
+    // ── Events ────────────────────────────────────────
+    $('#customer-name-hero').addEventListener('input', updateBottomBar);
+    $('#special-note').addEventListener('input', function() {
+      $('#note-count').textContent = this.value.length;
+    });
+    $('#btn-view-cart').addEventListener('click', showCart);
+    $('#btn-back-menu').addEventListener('click', () => { showScreen('screen-menu'); renderMenu(); });
+    $('#btn-pay').addEventListener('click', showPayment);
+    $('#btn-back-cart').addEventListener('click', () => { showScreen('screen-cart'); });
+    $('#btn-upi').addEventListener('click', () => placeOrder('upi'));
+    $('#btn-counter').addEventListener('click', () => placeOrder('counter'));
+    $('#btn-new-order').addEventListener('click', resetApp);
+
+    // Modal events
+    $('#modal-close').addEventListener('click', hideVariantModal);
+    $('.modal-backdrop').addEventListener('click', hideVariantModal);
+    $('#btn-half').addEventListener('click', () => {
+      if (pendingItem) addToCart(pendingItem.id, 'half', pendingItem.halfPrice);
+    });
+    $('#btn-full').addEventListener('click', () => {
+      if (pendingItem) addToCart(pendingItem.id, 'full', pendingItem.fullPrice);
+    });
+
+    // ── Init ──────────────────────────────────────────
+    loadMenu();
+  </script>
+</body>
+</html>
+
+       

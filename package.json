@@ -1,0 +1,14 @@
+{
+  "name": "smart-ordering-system",
+  "version": "1.0.0",
+  "description": "Smart Ordering and Payment System for Small Food Stalls",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "launch": "node launch.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "firebase-admin": "^13.7.0"
+  }
+}
